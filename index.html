@@ -662,7 +662,7 @@ el('fileImport').addEventListener('change',function(){
 });
 
 /* ===== 版本与自动更新检测 ===== */
-var APP_VERSION='20260910-11';
+var APP_VERSION='20260910-12';
 function checkUpdate(){
   try{
     var last=localStorage.getItem('appVersion');
@@ -756,9 +756,31 @@ el('btnImportConfirm').addEventListener('click',function(){
   alert('成功导入 '+count+' 条排期');
 });
 
+/* ===== 批量导入排期 ===== */
+var BATCH_JOBS=[
+  {date:'2026-09-12',start:'14:00',end:'16:00',type:'创作',client:'阿禾里',location:'东山口',fee:0,status:'已确认',note:'实际时间13:30-15:30；日系胶片'},
+  {date:'2026-09-12',start:'19:00',end:'21:00',type:'摄影活动',client:'光影的传说',location:'梦桥乐坊咖啡厅',fee:600,status:'已确认',note:''},
+  {date:'2026-09-13',start:'15:00',end:'17:00',type:'其他',client:'猫叔',location:'三行诗工作室',fee:600,status:'已确认',note:'面授教学'},
+  {date:'2026-10-11',start:'14:00',end:'17:00',type:'摄影活动',client:'小施',location:'海珠室内工作室',fee:600,status:'已确认',note:'室内情绪风；费用600-900'},
+  {date:'2026-10-18',start:'14:00',end:'17:00',type:'摄影活动',client:'小施',location:'海珠室内工作室',fee:600,status:'已确认',note:'室内情绪风；费用600-900'},
+  {date:'2026-10-24',start:'13:00',end:'17:00',type:'创作',client:'荞麦娘',location:'未知',fee:0,status:'已确认',note:''},
+  {date:'2026-10-25',start:'10:00',end:'18:00',type:'摄影活动',client:'香港摄影协会',location:'香港',fee:1800,status:'已确认',note:'实际时间09:30-17:30；记得提前抢去香港的来回车票（早上8点到香港西九龙站），并且办理签证'}
+];
+function batchImport(){
+  try{
+    if(localStorage.getItem('batchImported_v1'))return;
+    BATCH_JOBS.forEach(function(j){
+      state.jobs.push({id:genId(),date:j.date,start:j.start,end:j.end,type:j.type,client:j.client,location:j.location,fee:j.fee,status:j.status,note:j.note});
+    });
+    localStorage.setItem('batchImported_v1','1');
+    save();
+  }catch(e){}
+}
+
 /* ===== 初始化 ===== */
 (function(){
   load();
+  batchImport();
   var t=new Date();
   state.viewY=t.getFullYear();state.viewM=t.getMonth();
   state.selDate=todayStr();
