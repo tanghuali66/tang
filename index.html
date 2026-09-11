@@ -663,13 +663,14 @@ el('fileImport').addEventListener('change',function(){
 });
 
 /* ===== 版本与自动更新检测 ===== */
-var APP_VERSION='20260911-2';
+var APP_VERSION='20260911-3';
 function checkUpdate(){
   try{
     var last=localStorage.getItem('appVersion');
     if(last&&last!==APP_VERSION){
       localStorage.setItem('appVersion',APP_VERSION);
-      location.reload();
+      /* 加时间戳强制从服务器拉最新版，绕过浏览器缓存 */
+      location.href=location.pathname+'?v='+Date.now();
       return;
     }
     localStorage.setItem('appVersion',APP_VERSION);
