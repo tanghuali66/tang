@@ -663,7 +663,7 @@ el('fileImport').addEventListener('change',function(){
 });
 
 /* ===== 版本与自动更新检测 ===== */
-var APP_VERSION='20260911-3';
+var APP_VERSION='20260911-4';
 function checkUpdate(){
   try{
     var last=localStorage.getItem('appVersion');
@@ -772,7 +772,10 @@ function batchImport(){
   try{
     if(localStorage.getItem('batchImported_v1'))return;
     BATCH_JOBS.forEach(function(j){
-      state.jobs.push({id:genId(),date:j.date,start:j.start,end:j.end,type:j.type,client:j.client,location:j.location,fee:j.fee,status:j.status,note:j.note});
+      var exists=state.jobs.some(function(e){return e.date===j.date&&e.start===j.start&&e.client===j.client});
+      if(!exists){
+        state.jobs.push({id:genId(),date:j.date,start:j.start,end:j.end,type:j.type,client:j.client,location:j.location,fee:j.fee,status:j.status,note:j.note});
+      }
     });
     localStorage.setItem('batchImported_v1','1');
     save();
