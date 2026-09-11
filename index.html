@@ -404,7 +404,7 @@ var ICONS={
 /* ===== 统计 ===== */
 function renderStats(){
   var y=state.viewY,m=state.viewM;
-  var list=state.jobs.filter(function(j){var p=j.date.split('-');return +p[0]===y&&+p[1]===m});
+  var list=state.jobs.filter(function(j){var p=j.date.split('-');return +p[0]===y&&+p[1]===m+1});
   var confirmed=list.filter(function(j){return j.status==='已确认'}).length;
   var pending=list.filter(function(j){return j.status==='待定'}).length;
   var done=list.filter(function(j){return j.status==='已完成'}).length;
@@ -663,7 +663,7 @@ el('fileImport').addEventListener('change',function(){
 });
 
 /* ===== 版本与自动更新检测 ===== */
-var APP_VERSION='20260911-4';
+var APP_VERSION='20260911-5';
 function checkUpdate(){
   try{
     var last=localStorage.getItem('appVersion');
