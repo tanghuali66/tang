@@ -663,7 +663,7 @@ el('fileImport').addEventListener('change',function(){
 });
 
 /* ===== 版本与自动更新检测 ===== */
-var APP_VERSION='20260911-1';
+var APP_VERSION='20260911-2';
 function checkUpdate(){
   try{
     var last=localStorage.getItem('appVersion');
@@ -793,6 +793,21 @@ el('btnSync').addEventListener('click',function(){
 /* ===== 初始化 ===== */
 (function(){
   load();
+  /* URL 参数自动同步：打开 ?sync=1 即自动导入7条排期 */
+  try{
+    if(location.search.indexOf('sync=1')>=0){
+      var added=0;
+      BATCH_JOBS.forEach(function(j){
+        var exists=state.jobs.some(function(e){return e.date===j.date&&e.start===j.start&&e.client===j.client});
+        if(!exists){
+          state.jobs.push({id:genId(),date:j.date,start:j.start,end:j.end,type:j.type,client:j.client,location:j.location,fee:j.fee,status:j.status,note:j.note});
+          added++;
+        }
+      });
+      if(added>0)save();
+      history.replaceState(null,'',location.pathname);
+    }
+  }catch(e){}
   batchImport();
   var t=new Date();
   state.viewY=t.getFullYear();state.viewM=t.getMonth();
